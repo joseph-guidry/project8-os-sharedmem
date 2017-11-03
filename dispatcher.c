@@ -39,6 +39,7 @@ int main(void)
 
 		if (feof(stdin) )
 			break;
+
 		/* replace \n with a NULL terminator */
 		buffer[strlen(buffer) - 1] = '\0';
 		strncpy(data->message_buffer, buffer, sizeof(buffer));
