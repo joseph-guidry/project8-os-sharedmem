@@ -9,12 +9,12 @@
 
 /* Each shared memory block = 1024 bytes */
 #define SHM_SIZE 1024 
-#define MAX_BUFFER 256
+#define MAX_BUFFER 512
 
 
 typedef struct shared_message {
 	long long message_id;
-	char message_buffer[ 1016 ];
+	char message_buffer[ MAX_BUFFER ];
 }xMessage;
 
 

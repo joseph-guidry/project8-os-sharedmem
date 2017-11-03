@@ -24,7 +24,6 @@ int main(void)
 		exit(2);
 	}
 
-
 	/* attach to the segment to a pointer to it */
 	data = shmat(shmid, (void *) 0, 0);
 	if ( data == (xMessage *)(-1))
@@ -62,7 +61,7 @@ int main(void)
 	}
 	/* Wait for 2 seconds to allow clients to read signal */
 	printf("Disconnecting clients ...\n");
-	sleep(2);
+	sleep(1);
 	shmctl(shmid, IPC_RMID, NULL);
     return 0;
 }

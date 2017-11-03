@@ -7,6 +7,13 @@ int main(void)
 	xMessage  *data;
 	long long msgid = -1;
 
+	/* check to see if the server process is running before attempting to connect */
+	if ( system("pidof -x server > /dev/null") == 0)
+	{
+		printf("Please start server before attempting to start server\n");
+		exit(5);
+	}
+
 	/* Make a key */
 	if ( (key = ftok("/", 'A')) == -1 )
 	{
