@@ -1,11 +1,20 @@
+#include <signal.h>
+
 #include "relay.h"
+
+// Allow CTRL + C to start terminating the clients
+/* Prototypes for Signal Handling */
+int set_signal_handler(void);
+void signal_handler (int sig);
+
+/* The msgid is used to signal clients when dispatcher has exited */
+static long msgid = 1;
 
 int main(void)
 {
 	key_t key;
 	int shmid;
 	xMessage *data;
-	long long msgid = 1;
 	char buffer[MAX_BUFFER];
 
 	
@@ -33,6 +42,10 @@ int main(void)
 	}
 	
 	data->message_id = 0;
+	if (set_signal_handler() == -1)
+	{
+		perror("signhandler");
+	}
 
 	while ( fgets(buffer, MAX_BUFFER, stdin) != NULL )
 	{
@@ -62,7 +75,34 @@ int main(void)
 	}
 	/* Wait for 2 seconds to allow clients to read signal */
 	printf("Disconnecting clients ...\n");
-	sleep(1);
+	sleep(0.5);
 	shmctl(shmid, IPC_RMID, NULL);
     return 0;
+}
+
+int set_signal_handler(void)
+{
+	int retval = 0;
+
+	struct sigaction action;
+	action.sa_handler = signal_handler;
+	action.sa_flags = 0;
+	sigemptyset(&action.sa_mask);
+
+	if ( (retval = sigaction(SIGINT, &action, NULL)) != 0)
+		return retval;
+
+	return retval;
+}
+
+void signal_handler(int sig)
+{
+	switch(sig)
+	{
+		case SIGINT:
+			msgid = -1;
+			break;
+		default:
+			break;
+	}
 }

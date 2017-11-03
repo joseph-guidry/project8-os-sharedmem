@@ -5,7 +5,7 @@ int main(void)
 	key_t key;
 	int shmid = 0;
 	xMessage  *data;
-	long long msgid = -1;
+	long msgid = -1;
 
 	/* check to see if the server process is running before attempting to connect */
 	if ( system("pidof -x ""server"" > /dev/null") > 0)
@@ -28,16 +28,16 @@ int main(void)
 		exit(3);
 	}
 
+	/* attach to the segment to a pointer to it */
+	data = shmat(shmid, (void *) 0, 0);
+	if ( data == (xMessage *)(-1))
+	{
+		perror("shmat");
+		exit(4);
+	}
 
 	for ( ; ; )
 	{
-		/* attach to the segment to a pointer to it */
-		data = shmat(shmid, (void *) 0, 0);
-		if ( data == (xMessage *)(-1))
-		{
-			perror("shmat");
-			exit(4);
-		}
 /*
 		printf("Message # : [%lld]\n", data->message_id);
 		printf("Message   : [%s]\n", data->message_buffer);
@@ -59,13 +59,12 @@ int main(void)
 
 		// Sleep a little bit ?
 		sleep(2);
-
-		if ( shmdt(data) == -1 )
-		{
-			perror("shmdt");
-			exit(5);
-		}
 	}
-	
+	/* Detach from the shared memory */
+	if ( shmdt(data) == -1 )
+	{
+		perror("shmdt");
+		exit(5);
+	}
     return 0;
 }
