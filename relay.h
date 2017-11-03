@@ -9,7 +9,7 @@
 
 /* Each shared memory block = 1024 bytes */
 #define SHM_SIZE 1024 
-#define MAX_BUFFER 100
+#define MAX_BUFFER 256
 
 
 typedef struct shared_message {

@@ -5,7 +5,7 @@ int main(void)
 	key_t key;
 	int shmid = 0;
 	xMessage  *data;
-	long long msgid = 0;
+	long long msgid = -1;
 
 	/* Make a key */
 	if ( (key = ftok("/", 'A')) == -1 )
@@ -15,7 +15,7 @@ int main(void)
 	}
 
 	/* connect to/create segment */
-	if ( (shmid = shmget(key, SHM_SIZE, 0644 | IPC_CREAT)) == -1 )
+	if ( (shmid = shmget(key, SHM_SIZE, 0444 | IPC_CREAT)) == -1 )
 	{
 		perror("shmget");
 		exit(2);
@@ -31,20 +31,19 @@ int main(void)
 			perror("shmat");
 			exit(3);
 		}
-
-		/* Needs to check to if the message number has incremented */
-		/* TODO - change the evaluation of shared memory to determine if message is new */
-		/*
+/*
 		printf("Message # : [%lld]\n", data->message_id);
 		printf("Message   : [%s]\n", data->message_buffer);
 		printf("msgid [%lld] \n", msgid);
-		*/
+*/	
 		if ( (data->message_id) < 0)
 		{
 			/* This would mean the dispatcher has exited if value < 0 */
 			printf("This is the kill signal\n");
 			exit(1);
 		}
+		else if (msgid == -1 )
+			msgid = data->message_id;
 		else if ( (data->message_id - msgid) > 0 )
 		{
 			printf("Shared Data : [%s]\n", data->message_buffer);
@@ -60,17 +59,6 @@ int main(void)
 			exit(5);
 		}
 	}
-	/* Detatch from data after use */
 	
-/* random
-
-else if ( msgid == 0 )
-{
-	
-}
-*/
-
-	
-
     return 0;
 }
