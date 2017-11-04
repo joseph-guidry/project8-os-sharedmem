@@ -57,25 +57,19 @@ int main(void)
 		buffer[strlen(buffer) - 1] = '\0';
 		strncpy(data->message_buffer, buffer, sizeof(buffer));
 		data->message_id = msgid++;
-
-	/*
-		printf("message # [%lld] \n", data->message_id);
-		printf("message [%s] \n", data->message_buffer);
-	*/
 	}
 
 	/* Set the exit value for message_id in the data segment */
 	data->message_id = -1;
-	printf("updated message id to -1? [%lld]\n", data->message_id);
 
 	if (shmdt(data) == -1 )
 	{
 		perror("shmdt");
 		exit(4);
 	}
-	/* Wait for 2 seconds to allow clients to read signal */
-	printf("Disconnecting clients ...\n");
-	sleep(0.5);
+
+	/* Wait to allow clients to read signal */
+	sleep(0.1);
 	shmctl(shmid, IPC_RMID, NULL);
     return 0;
 }

@@ -53,7 +53,7 @@ int main(void)
 			msgid = data->message_id;
 		else if ( (data->message_id - msgid) > 0 )
 		{
-			printf("Shared Data : [%s]\n", data->message_buffer);
+			printf("[%s]\n", data->message_buffer);
 			msgid = data->message_id;
 		}
 
