@@ -1,0 +1,78 @@
+Name: Guidry, Joseph C
+Date: Nov 4, 2017
+Current Module: Operating Systems
+Project Name: Relay
+
+Project Goals:
+	<A two to three sentence description of the project and its intent>
+	The primary goal of this project was to implement an Inter-process Communication mechanism. There were a few ways this 
+	project could have been completed, I choose to use a Shared Memory space. The project intends to start a dispatcher, and 
+	send messages to any number of clients. Displaying only the messages that were received. 
+
+Considerations:
+	<A bulleted list of considerations and conditions which affected the design of your project>
+	- A mechanism to implement IPC.
+	- The API calls to communicate with shared memory.
+	- How the client will know about updated message, vs repeat message.
+	- Handle Ctrl + C to act like Ctrl + D, which called from the dispatcher, will terminate all connected clients. 
+
+Initial Design:
+	<A paragraph or more that adequately describes your program's structure and layout discussing the various modules (.c and corresponding .h files) that you implemented>
+	
+	This project consists for three files:
+	dispatcher.c : Is the server component, which will established the shared memory space, and attach to it 
+				   will have read/write privileges.
+
+	listener.c   : Is the client component, which will attach to the memory space and have read-only privileges. 
+
+	relay.h      : Holds the structure of the data stored in the memory space.
+
+	All clients will connect and read from the same memory space.
+
+Data Flow:
+	<A paragraph or longer describing the data flow of the program in a sequential manner.  Include a diagram when necessary.>
+	
+	This program requires the server program to start first, clients will look for the compiled dispatcher process name 
+	"server" prior to beginning.
+
+	Once server is running, any number of clients can be started in different terminal windows. 
+	The server will receive a message through STDIN on its terminal, and copy the message into the shared memory space.
+	Clients will check the message ID and if it has been changed from their stored value, it will print the message to their
+	terminal screen.
+
+	The Ctrl + C and Ctrl + D keyboard interrupts sent to the server terminal will signal to all clients to terminate. 
+
+
+Communication Protocol:
+	<Discuss any custom communication protocol you have used including the various request and responses that may be sent and received.>
+	
+	This project implements a Shared Memory space mechanism for IPC communications. 
+	
+Potential Pitfalls:
+	<Discuss any potential issues that you might run into while creating the project>
+
+	Have multiple writers would require the use of a semaphore to protect data.
+	Using a structure with a message id, this allows the clients to know when a message is new.
+	Having a client check if the server is running prior to connect to the write memory space. 
+
+Test Plan:
+	User Test:
+ 		<Describe the steps taken for each user test.>
+		- Ensure dispatcher/clients could attach to the shared memory space, without error.
+		- Push default message, ensure client could print to STDOUT.
+		- Get user input, and replace default message.
+		- Use GDB to verify status of dispatcher shared memory, without client. (Should of done first)
+	Test Cases:
+		<A brief overview of the test cases that you implemented.>
+		- Conduct a through run through of server-client instantiation, as described in the supplement.
+
+Conclusion:
+	<A review of the project, what worked, what didn’t and how to improve upon your project in the future.>
+
+	I enjoyed this project, with no restriction on the type of IPC mechanism, I was able to produce multiple versions of this project.
+	The discussion about shared memory was not discussion in depth in class, but the ability to discover its uses, allow for further
+	understanding of the benefits of the different IPC mechanisms.
+
+
+
+

@@ -1,13 +1,13 @@
 CC=gcc
 CFLAGS=-Wall -Wextra -Wpedantic -Wwrite-strings -Wstack-usage=1024 -Wfloat-equal -Waggregate-return -Winline
 
-all: server client
+all: dispatcher listener
 
-server: dispatcher.c
-	$(CC) $(CFLAGS) dispatcher.c -o server
+dispatcher: dispatcher.c
+	$(CC) $(CFLAGS) dispatcher.c -o dispatcher
 
-client: listener.c
-	$(CC) $(CFLAGS) listener.c -o client
+listener: listener.c
+	$(CC) $(CFLAGS) listener.c -o listener
 
 debug: CFLAGS += -g
 debug: server client
@@ -16,4 +16,4 @@ profile: CFLAGS += -pg
 profile: server client
 
 clean:
-	rm -f server  client *.o
+	rm -f listener dispatcher *.o
