@@ -10,10 +10,10 @@ client: listener.c
 	$(CC) $(CFLAGS) listener.c -o client
 
 debug: CFLAGS += -g
-debug: signaler sender
+debug: server client
 
 profile: CFLAGS += -pg
-profile: signaler sender
+profile: server client
 
 clean:
 	rm -f server  client *.o
