@@ -38,15 +38,9 @@ int main(void)
 
 	for ( ; ; )
 	{
-/*
-		printf("Message # : [%lld]\n", data->message_id);
-		printf("Message   : [%s]\n", data->message_buffer);
-		printf("msgid [%lld] \n", msgid);
-*/	
 		if ( (data->message_id) < 0)
 		{
 			/* This would mean the dispatcher has exited if value < 0 */
-			printf("This is the kill signal\n");
 			exit(1);
 		}
 		else if (msgid == -1 )
